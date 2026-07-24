@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ UID Bypass Registry — System V4.0</title>
+  <meta name="description" content="Enterprise-grade UID Whitelist Infrastructure with Stealth Protocol, real-time IP tracking, and instant access control.">
+  <meta name="theme-color" content="#7c3aed">
+
+  <!-- Open Graph / WhatsApp / Telegram / Discord / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://uidbbypass.netlify.app/">
+  <meta property="og:title" content="⚡ UID BYPASS REGISTRY — SYSTEM V4.0">
+  <meta property="og:description" content="Enterprise-grade UID Whitelist Infrastructure with Stealth Protocol, real-time IP tracking, and instant access control.">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://uidbbypass.netlify.app/">
+  <meta name="twitter:title" content="⚡ UID BYPASS REGISTRY — SYSTEM V4.0">
+  <meta name="twitter:description" content="Enterprise-grade UID Whitelist Infrastructure with Stealth Protocol, real-time IP tracking, and instant access control.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050508;
+      --card: #0d0d14;
+      --border: rgba(255,255,255,0.07);
+      --purple: #7c3aed;
+      --purple-light: #a855f7;
+      --cyan: #06b6d4;
+      --text: #f1f5f9;
+      --muted: #64748b;
+      --green: #10b981;
+    }
+
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* ── GRID BG ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glow blobs */
+    .blob1 {
+      position: fixed;
+      top: -100px; left: -100px;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+    .blob2 {
+      position: fixed;
+      bottom: -80px; right: -80px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,5,8,0.8);
+      backdrop-filter: blur(20px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-hex {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1rem; color: #fff;
+      font-family: 'Syne', sans-serif;
+    }
+    .brand-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: 1px; }
+    .brand-version { font-size: 0.65rem; font-weight: 600; color: var(--purple-light); letter-spacing: 1px; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3); padding: 2px 7px; border-radius: 4px; margin-left: 2px; }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.5px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+
+    .btn-ghost {
+      padding: 8px 16px; border-radius: 7px;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s; letter-spacing: 0.3px;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); background: rgba(255,255,255,0.04); }
+
+    .btn-primary {
+      padding: 8px 18px; border-radius: 7px;
+      background: linear-gradient(135deg, var(--purple) 0%, #6d28d9 100%);
+      color: #fff; border: none;
+      font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 20px rgba(124,58,237,0.4);
+    }
+    .btn-primary:hover { opacity: 0.9; box-shadow: 0 0 32px rgba(124,58,237,0.6); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 24px 60px;
+    }
+
+    .ticker {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 5px 14px 5px 5px;
+      border-radius: 99px;
+      border: 1px solid rgba(16,185,129,0.25);
+      background: rgba(16,185,129,0.07);
+      color: var(--green);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+    .ticker-dot {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ticker-dot::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    .hero-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--purple-light);
+      margin-bottom: 18px;
+    }
+
+    .hero-h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(4rem, 10vw, 8.5rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -3px;
+      margin-bottom: 32px;
+    }
+    .hero-h1 .word1 {
+      display: block;
+      color: var(--text);
+    }
+    .hero-h1 .word2 {
+      display: block;
+      background: linear-gradient(135deg, var(--purple-light) 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      max-width: 440px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      margin-bottom: 44px;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 600; }
+
+    .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    .cta-main {
+      display: flex; align-items: center; gap: 10px;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, var(--purple) 0%, #6d28d9 100%);
+      color: #fff; border: none; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 700;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      cursor: pointer; text-decoration: none;
+      box-shadow: 0 0 32px rgba(124,58,237,0.45);
+      transition: box-shadow 0.25s, transform 0.2s;
+    }
+    .cta-main:hover { box-shadow: 0 0 48px rgba(124,58,237,0.65); transform: translateY(-2px); }
+
+    .cta-outline {
+      display: flex; align-items: center; gap: 10px;
+      padding: 15px 30px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--muted); border-radius: 10px;
+      font-size: 0.88rem; font-weight: 700;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.25s;
+    }
+    .cta-outline:hover { border-color: rgba(255,255,255,0.3); color: var(--text); background: rgba(255,255,255,0.04); }
+
+    /* ── MARQUEE TICKER ── */
+    .marquee-wrap {
+      position: relative; z-index: 1;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      padding: 14px 0;
+    }
+    .marquee-inner {
+      display: flex;
+      animation: marquee 22s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 40px;
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .marquee-item span { color: var(--purple-light); }
+    .marquee-sep { color: rgba(124,58,237,0.4); }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── FEATURES ── */
+    .section {
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(124,58,237,0.3);
+      background: rgba(124,58,237,0.08);
+      color: var(--purple-light);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .section-h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.8rem; font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+    .section-sub {
+      color: var(--muted); font-size: 0.95rem; margin-bottom: 48px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .feat {
+      background: var(--card);
+      padding: 28px 24px;
+      transition: background 0.2s;
+    }
+    .feat:hover { background: #131322; }
+    .feat-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+    .feat-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+    .feat-desc { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+
+    /* ── UID CHECK ── */
+    .check-section {
+      position: relative; z-index: 1;
+      max-width: 580px; margin: 0 auto 100px;
+      padding: 0 24px; text-align: center;
+    }
+    .check-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      text-align: left;
+    }
+    .check-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .check-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; }
+    .check-live { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; color: var(--green); letter-spacing: 1px; }
+    .check-live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+    .check-form { display: flex; gap: 10px; }
+    .check-input {
+      flex: 1; background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 14px;
+      color: var(--text); font-size: 0.88rem;
+      font-family: 'JetBrains Mono', monospace;
+      outline: none; transition: border-color 0.2s;
+    }
+    .check-input:focus { border-color: var(--purple); }
+    .check-input::placeholder { color: var(--muted); }
+
+    .check-btn {
+      padding: 12px 20px;
+      background: var(--purple); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.5px; cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .check-btn:hover { opacity: 0.85; }
+
+    #result {
+      margin-top: 14px; padding: 12px 14px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem; display: none;
+    }
+    .res-ok { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); color: #34d399; }
+    .res-bad { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #f87171; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      color: var(--muted); font-size: 0.8rem;
+    }
+    footer a { color: var(--purple-light); text-decoration: none; font-weight: 600; }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<div class="blob1"></div>
+<div class="blob2"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="brand">
+    <div class="brand-hex">UID</div>
+    <span class="brand-text">BYPASS<span class="brand-version">V4.0</span></span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="client.html" style="color:var(--cyan);font-weight:700;">Client Portal ⚡</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#check">UID Check</a></li>
+    <li><a href="login.html">Staff Portal</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <a href="client.html" class="btn-ghost" style="border-color:rgba(6,182,212,0.3);color:var(--cyan);">
+      Client Portal
+    </a>
+    <a href="login.html" class="btn-primary">Staff Login →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="ticker">
+    <div class="ticker-dot"></div>
+    SYSTEM V4.0 — ALL SERVICES OPERATIONAL
+  </div>
+
+  <div class="hero-label">Advanced UID Whitelist Infrastructure</div>
+
+  <h1 class="hero-h1">
+    <span class="word1">UID</span>
+    <span class="word2">BYPASS</span>
+  </h1>
+
+  <p class="hero-desc">
+    Enterprise-grade whitelist management with <strong>Stealth Protocol</strong>.
+    Multi-tier reseller network, IP tracking, and zero-detection access control.
+  </p>
+
+  <div class="hero-cta">
+    <a href="client.html" class="cta-main" style="background:linear-gradient(135deg, var(--cyan), var(--purple));box-shadow:0 0 32px rgba(6,182,212,0.4);">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Client Download Portal
+    </a>
+    <a href="login.html" class="cta-outline">
+      Staff Login
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <!-- Duplicate for seamless loop -->
+    <div class="marquee-item"><span>⚡ INSTANT WHITELIST</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>🔒 STEALTH PROTOCOL</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>🌐 IP TRACKING</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>👥 RESELLER NETWORK</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>💳 CREDIT SYSTEM</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>📋 UID REGISTRY</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>🛡️ ZERO DETECTION</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>⚡ INSTANT WHITELIST</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>🔒 STEALTH PROTOCOL</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>🌐 IP TRACKING</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>👥 RESELLER NETWORK</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>💳 CREDIT SYSTEM</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>📋 UID REGISTRY</span> <em class="marquee-sep">///</em></div>
+    <div class="marquee-item"><span>🛡️ ZERO DETECTION</span> <em class="marquee-sep">///</em></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-tag">Capabilities</div>
+  <h2 class="section-h2">Everything you need to operate.</h2>
+  <p class="section-sub">Built for admins, sellers, and resellers — each with isolated permissions and full audit trails.</p>
+
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Instant Whitelisting</div>
+      <div class="feat-desc">Add UIDs with 1D, 7D, 15D, 30D or 1 Year durations. Synced to GTC backend in real-time.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🔒</div>
+      <div class="feat-title">Stealth Protocol</div>
+      <div class="feat-desc">Zero-detection architecture. Logo removal and rank control without triggering any flags.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">👥</div>
+      <div class="feat-title">Reseller Network</div>
+      <div class="feat-desc">Multi-tier access: Admin → Seller → Reseller. Full isolation — each can only manage their own UIDs.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🌐</div>
+      <div class="feat-title">IP Login Tracking</div>
+      <div class="feat-desc">Every session records a live IP address. Admins and Sellers can audit all reseller logins.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💳</div>
+      <div class="feat-title">Credit System</div>
+      <div class="feat-desc">Allocate and track credits per reseller. Each whitelist deducts one credit — full control guaranteed.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📋</div>
+      <div class="feat-title">UID Registry</div>
+      <div class="feat-desc">Personal UID history per account. Strict ownership lock — resellers see and manage only their UIDs.</div>
+    </div>
+  </div>
+</section>
+
+<!-- UID CHECK -->
+<section class="check-section" id="check">
+  <div class="check-card">
+    <div class="check-top">
+      <div class="check-title">Verify UID Status</div>
+      <div class="check-live">LIVE REGISTRY</div>
+    </div>
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:20px;">Enter a UID to instantly check if it's whitelisted and active in the system.</p>
+    <div class="check-form">
+      <input type="text" id="checkUid" class="check-input" placeholder="e.g. 15855920849" />
+      <button class="check-btn" onclick="checkStatus()">VERIFY</button>
+    </div>
+    <div id="result"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 UID Bypass Registry — All sessions logged and monitored.</span>
+  <div style="display:flex;gap:20px;">
+    <a href="login.html">Staff Login</a>
+    <a href="https://discord.gg/" target="_blank">Discord</a>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script>
+  async function checkStatus() {
+    const uid = document.getElementById('checkUid').value.trim();
+    const el = document.getElementById('result');
+    if (!uid) return;
+    el.style.display = 'block';
+    el.className = '';
+    el.textContent = '🔍 Querying live registry...';
+    try {
+      const BASE = (window.APP_CONFIG && window.APP_CONFIG.BACKEND_URL) || 'https://uidbackend.onrender.com/api';
+      const r = await fetch(`${BASE}/client/check/${uid}`);
+      const d = await r.json();
+      if (d.success && d.valid) {
+        el.className = 'res-ok';
+        el.innerHTML = `✅ ACTIVE — UID <b>${uid}</b> is whitelisted (${d.days_remaining} days left).<br><a href="client.html" style="display:inline-block;margin-top:8px;color:#fff;background:var(--cyan);padding:4px 12px;border-radius:6px;text-decoration:none;font-weight:700;">Open Client Portal & Download EXE →</a>`;
+      } else if (d.success && d.expired) {
+        el.className = 'res-bad';
+        el.textContent = `⚠️ EXPIRED — UID ${uid} license has expired.`;
+      } else {
+        el.className = 'res-bad';
+        el.textContent = `❌ NOT FOUND — UID ${uid} has no active bypass in registry.`;
+      }
+    } catch (err) {
+      console.error(err);
+      el.className = 'res-bad';
+      el.textContent = '📡 Connecting to backend server (Render spin-up)... Please wait 15 seconds and try again.';
+    }
+  }
+  document.getElementById('checkUid').addEventListener('keypress', e => { if (e.key === 'Enter') checkStatus(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Portal — UID Bypass Registry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050508;
+      --card: #0d0d14;
+      --border: rgba(255,255,255,0.07);
+      --purple: #7c3aed;
+      --purple-light: #a855f7;
+      --cyan: #06b6d4;
+      --green: #10b981;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --text: #f1f5f9;
+      --muted: #64748b;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Animated grid */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none; z-index: 0;
+      animation: gridDrift 20s linear infinite;
+    }
+    @keyframes gridDrift {
+      from { background-position: 0 0; }
+      to   { background-position: 50px 50px; }
+    }
+
+    /* Blobs */
+    .blob1 {
+      position: fixed; top: -120px; left: -80px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+      animation: floatA 9s ease-in-out infinite;
+    }
+    .blob2 {
+      position: fixed; bottom: -100px; right: -60px;
+      width: 420px; height: 420px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(6,182,212,0.13) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+      animation: floatB 11s ease-in-out infinite;
+    }
+    @keyframes floatA { 0%,100%{transform:translate(0,0);} 50%{transform:translate(25px,-20px);} }
+    @keyframes floatB { 0%,100%{transform:translate(0,0);} 50%{transform:translate(-20px,18px);} }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 62px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,5,8,0.9);
+      backdrop-filter: blur(20px);
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .brand-box {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 900;
+      font-size: 0.65rem; color: #fff; letter-spacing: 0.3px;
+      box-shadow: 0 0 14px rgba(124,58,237,0.5);
+      animation: brandGlow 3s ease-in-out infinite;
+    }
+    @keyframes brandGlow {
+      0%,100% { box-shadow: 0 0 10px rgba(124,58,237,0.4); }
+      50%      { box-shadow: 0 0 22px rgba(168,85,247,0.7); }
+    }
+    .brand-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 0.9rem; letter-spacing: 0.5px;
+      color: var(--text);
+    }
+    .nav-badge {
+      display: flex; align-items: center; gap: 7px;
+      padding: 5px 12px; border-radius: 6px;
+      border: 1px solid rgba(16,185,129,0.25);
+      background: rgba(16,185,129,0.07);
+      color: var(--green); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 8px var(--green);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 60px 24px 40px;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 50px;
+      border: 1px solid rgba(124,58,237,0.3);
+      background: rgba(124,58,237,0.08);
+      color: var(--purple-light);
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
+      margin-bottom: 22px;
+      animation: tagSlide 0.6s ease both;
+    }
+    @keyframes tagSlide { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:translateY(0);} }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 900; letter-spacing: -1.5px; line-height: 1.1;
+      margin-bottom: 16px;
+      animation: heroSlide 0.7s 0.1s ease both;
+    }
+    @keyframes heroSlide { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, var(--purple-light), var(--cyan));
+      background-size: 200%;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
+
+    .hero-sub {
+      color: var(--muted); font-size: 1rem; max-width: 460px; line-height: 1.7;
+      margin-bottom: 36px;
+      animation: heroSlide 0.7s 0.2s ease both;
+    }
+
+    /* ── SEARCH BOX ── */
+    .search-box {
+      width: 100%; max-width: 520px;
+      animation: heroSlide 0.7s 0.3s ease both;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex; gap: 0;
+    }
+    .uid-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-right: none;
+      border-radius: 10px 0 0 10px;
+      padding: 15px 18px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem; font-weight: 700;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .uid-input::placeholder { color: var(--muted); font-weight: 400; }
+    .uid-input:focus {
+      border-color: var(--purple);
+      background: rgba(124,58,237,0.08);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+    }
+    .check-btn {
+      padding: 15px 26px;
+      background: linear-gradient(135deg, var(--purple), #6d28d9);
+      border: none; border-radius: 0 10px 10px 0;
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem; font-weight: 800;
+      cursor: pointer; white-space: nowrap;
+      box-shadow: 0 0 20px rgba(124,58,237,0.35);
+      transition: box-shadow 0.2s, transform 0.15s;
+      position: relative; overflow: hidden;
+    }
+    .check-btn:hover { box-shadow: 0 0 34px rgba(124,58,237,0.55); transform: scale(1.02); }
+    .check-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .check-btn .spinner {
+      display: none; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESULT AREA ── */
+    #resultArea {
+      width: 100%; max-width: 680px;
+      margin: 32px auto 0;
+      position: relative; z-index: 1;
+    }
+
+    /* Error state */
+    .result-error {
+      background: rgba(239,68,68,0.07);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 14px; padding: 20px 24px;
+      display: flex; align-items: center; gap: 14px;
+      animation: resultIn 0.4s cubic-bezier(.34,1.56,.64,1) both;
+      color: #fca5a5; font-weight: 600;
+    }
+    .result-error .err-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(239,68,68,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+
+    /* Success portal card */
+    .portal-card {
+      background: var(--card);
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: 18px; overflow: hidden;
+      animation: resultIn 0.4s cubic-bezier(.34,1.56,.64,1) both;
+      box-shadow: 0 0 40px rgba(16,185,129,0.08);
+    }
+    @keyframes resultIn {
+      from { opacity:0; transform:scale(0.95) translateY(12px); }
+      to   { opacity:1; transform:scale(1) translateY(0); }
+    }
+
+    /* Card header */
+    .portal-header {
+      position: relative; overflow: hidden;
+      padding: 28px 30px;
+      background: linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(6,182,212,0.06) 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .portal-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(16,185,129,0.05) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(16,185,129,0.05) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .portal-header-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; }
+    .verified-badge {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), #059669);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+      box-shadow: 0 0 24px rgba(16,185,129,0.5);
+      animation: verifyPulse 2s ease-in-out infinite;
+    }
+    @keyframes verifyPulse {
+      0%,100% { box-shadow: 0 0 16px rgba(16,185,129,0.4); }
+      50%      { box-shadow: 0 0 32px rgba(16,185,129,0.7); }
+    }
+    .uid-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--green); letter-spacing: 1px;
+    }
+    .uid-verified-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--green); opacity: 0.7;
+    }
+    .status-active {
+      margin-left: auto;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(16,185,129,0.12);
+      border: 1px solid rgba(16,185,129,0.3);
+      color: var(--green); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .status-expired {
+      margin-left: auto;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.25);
+      color: #f87171; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Card body */
+    .portal-body { padding: 24px 30px; }
+
+    /* Info grid */
+    .info-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-bottom: 24px;
+    }
+    .info-item {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      transition: border-color 0.2s, transform 0.15s;
+      animation: infoIn 0.4s ease both;
+    }
+    .info-item:hover { border-color: rgba(124,58,237,0.25); transform: translateY(-2px); }
+    .info-item:nth-child(1) { animation-delay: 0.05s; }
+    .info-item:nth-child(2) { animation-delay: 0.10s; }
+    .info-item:nth-child(3) { animation-delay: 0.15s; }
+    .info-item:nth-child(4) { animation-delay: 0.20s; }
+    @keyframes infoIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .info-label {
+      font-size: 0.68rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      color: var(--muted); margin-bottom: 6px;
+    }
+    .info-value {
+      font-size: 0.95rem; font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text);
+    }
+
+    /* Expiry bar */
+    .expiry-bar-wrap { margin-bottom: 24px; }
+    .expiry-bar-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.75rem; color: var(--muted); margin-bottom: 8px;
+    }
+    .expiry-bar-track {
+      height: 6px; background: rgba(255,255,255,0.06);
+      border-radius: 10px; overflow: hidden;
+    }
+    .expiry-bar-fill {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      transition: width 1s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 0 8px rgba(16,185,129,0.4);
+    }
+
+    /* Download section */
+    .download-section {
+      background: rgba(124,58,237,0.06);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 12px; padding: 20px 22px;
+      display: flex; align-items: center; gap: 18px;
+    }
+    .download-icon-wrap {
+      width: 54px; height: 54px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(124,58,237,0.4);
+      animation: iconFloat 3s ease-in-out infinite;
+    }
+    @keyframes iconFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-4px); }
+    }
+    .download-icon-wrap svg { stroke: #fff; }
+    .download-info { flex: 1; }
+    .download-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: 4px; }
+    .download-sub { font-size: 0.78rem; color: var(--muted); }
+    .download-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 22px; border-radius: 9px;
+      background: linear-gradient(135deg, var(--purple) 0%, #6d28d9 100%);
+      color: #fff; border: none;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem; font-weight: 800;
+      letter-spacing: 0.5px; cursor: pointer;
+      box-shadow: 0 0 22px rgba(124,58,237,0.4);
+      transition: box-shadow 0.2s, transform 0.15s;
+      text-decoration: none; white-space: nowrap;
+      position: relative; overflow: hidden;
+    }
+    .download-btn:hover { box-shadow: 0 0 36px rgba(124,58,237,0.6); transform: translateY(-2px); }
+    .download-btn::after {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      animation: btnShine 2.5s ease-in-out infinite;
+    }
+    @keyframes btnShine { 0%{left:-100%} 50%,100%{left:150%} }
+
+    /* Steps section */
+    .steps { margin-top: 48px; text-align: center; padding: 0 24px 60px; position: relative; z-index: 1; }
+    .steps-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem; font-weight: 900; margin-bottom: 6px;
+    }
+    .steps-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 32px; }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; max-width: 720px; margin: 0 auto;
+    }
+    .step-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px 20px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .step-card:hover { border-color: rgba(124,58,237,0.3); transform: translateY(-3px); }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.3);
+      color: var(--purple-light);
+      font-family: 'Syne', sans-serif; font-weight: 900; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .step-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; }
+    .step-desc { color: var(--muted); font-size: 0.8rem; line-height: 1.6; }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px; border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 0.78rem;
+      position: relative; z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob1"></div>
+<div class="blob2"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="preview.html" class="brand">
+    <div class="brand-box">UID</div>
+    <span class="brand-text">BYPASS <span style="font-size:0.6rem;color:var(--purple-light);background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);padding:1px 6px;border-radius:4px;letter-spacing:1px;">V4.0</span></span>
+  </a>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <a href="preview.html" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:7px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text);font-size:0.8rem;font-weight:600;text-decoration:none;transition:all 0.2s;">
+      ← BACK TO HOME
+    </a>
+    <div class="nav-badge"><div class="live-dot"></div>CLIENT PORTAL</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    UID BYPASS SYSTEM V4.0
+  </div>
+  <h1>Enter Your <span>UID</span> to<br>Access Portal</h1>
+  <p class="hero-sub">Enter your numeric game UID below to verify your whitelist status and download the bypass tool.</p>
+
+  <!-- Search Box -->
+  <div class="search-box">
+    <div class="input-wrap">
+      <input
+        type="text"
+        id="uidInput"
+        class="uid-input"
+        placeholder="Enter your UID (e.g. 15855920849)"
+        maxlength="20"
+        oninput="this.value=this.value.replace(/\D/g,'')"
+        onkeydown="if(event.key==='Enter')checkUID()"
+      />
+      <button class="check-btn" id="checkBtn" onclick="checkUID()">
+        <span id="btnLabel">CHECK UID</span>
+        <span class="spinner" id="btnSpinner"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div id="resultArea"></div>
+</div>
+
+<!-- STEPS -->
+<div class="steps">
+  <div class="steps-title">How It Works</div>
+  <p class="steps-sub">3 simple steps to activate your bypass</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-title">Enter Your UID</div>
+      <div class="step-desc">Type your numeric game account UID in the field above and click Check UID.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-title">Verify Status</div>
+      <div class="step-desc">Our system verifies your UID against the whitelist registry instantly.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-title">Download & Run</div>
+      <div class="step-desc">Download the bypass EXE, run as Administrator, and you're live.</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">© 2026 UID Bypass Registry V4.0 — All rights reserved</div>
+
+<script src="config.js"></script>
+<script>
+  const DOWNLOAD_URL = 'https://github.com/Kanha140/UID-BYPASS';
+
+  async function checkUID() {
+    const input = document.getElementById('uidInput');
+    const uid = input.value.trim();
+    const btn = document.getElementById('checkBtn');
+    const label = document.getElementById('btnLabel');
+    const spinner = document.getElementById('btnSpinner');
+    const resultArea = document.getElementById('resultArea');
+
+    if (!uid) { input.focus(); return; }
+    if (!/^\d+$/.test(uid)) {
+      showError('❌ Invalid UID — only numeric UIDs are accepted.');
+      return;
+    }
+
+    // Loading state
+    btn.disabled = true;
+    label.style.display = 'none';
+    spinner.style.display = 'block';
+    resultArea.innerHTML = '';
+
+    try {
+      const BASE = window.APP_CONFIG ? window.APP_CONFIG.BACKEND_URL : 'http://localhost:5000/api';
+      const res = await fetch(`${BASE}/client/check/${uid}`);
+      const data = await res.json();
+
+      if (!data.success) {
+        showError(`❌ ${data.message || 'UID not found in whitelist.'}`);
+        return;
+      }
+
+      showResult(data);
+    } catch (err) {
+      showError('⚠ Could not connect to server. Please try again.');
+    } finally {
+      btn.disabled = false;
+      label.style.display = 'block';
+      spinner.style.display = 'none';
+    }
+  }
+
+  function showError(msg) {
+    document.getElementById('resultArea').innerHTML = `
+      <div class="result-error">
+        <div class="err-icon">❌</div>
+        <div>
+          <div style="font-size:0.95rem;margin-bottom:3px;">${msg}</div>
+          <div style="font-size:0.78rem;color:#94a3b8;">Contact your seller if you believe this is an error.</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function showResult(data) {
+    const pct = data.expired ? 0 : Math.min(100, Math.round((data.days_remaining / data.days) * 100));
+    const barColor = pct > 50 ? 'linear-gradient(90deg, var(--green), var(--cyan))'
+                   : pct > 20 ? 'linear-gradient(90deg, var(--yellow), var(--green))'
+                   : 'linear-gradient(90deg, var(--red), var(--yellow))';
+
+    const statusHtml = data.expired
+      ? `<span class="status-expired">⚠ EXPIRED</span>`
+      : `<span class="status-active"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s infinite;display:inline-block;"></span>ACTIVE</span>`;
+
+    document.getElementById('resultArea').innerHTML = `
+      <div class="portal-card">
+        <div class="portal-header">
+          <div class="portal-header-inner">
+            <div class="verified-badge">${data.expired ? '⚠️' : '✅'}</div>
+            <div>
+              <div class="uid-display">${data.uid}</div>
+              <div class="uid-verified-label">${data.expired ? 'Expired License' : '✓ Verified Whitelist'}</div>
+            </div>
+            ${statusHtml}
+          </div>
+        </div>
+
+        <div class="portal-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">⏱ Days Remaining</div>
+              <div class="info-value" style="color:${data.expired ? 'var(--red)' : 'var(--green)'};">${data.expired ? 'EXPIRED' : data.days_remaining + ' days'}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">📅 Plan Duration</div>
+              <div class="info-value">${data.days} Days</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">🗓 Added On</div>
+              <div class="info-value" style="font-size:0.8rem;">${data.added_time}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">📆 Expires On</div>
+              <div class="info-value" style="font-size:0.8rem;color:${data.expired ? 'var(--red)' : 'var(--cyan)'};">${data.expiry_date}</div>
+            </div>
+          </div>
+
+          <div class="expiry-bar-wrap">
+            <div class="expiry-bar-label">
+              <span>License Validity</span>
+              <span style="color:${data.expired ? 'var(--red)' : 'var(--green)'};">${pct}% remaining</span>
+            </div>
+            <div class="expiry-bar-track">
+              <div class="expiry-bar-fill" style="width:0%;background:${barColor};" id="expBar"></div>
+            </div>
+          </div>
+
+          ${!data.expired ? `
+          <div class="download-section">
+            <div class="download-icon-wrap">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+            </div>
+            <div class="download-info">
+              <div class="download-title">UID Bypass Tool V4.0</div>
+              <div class="download-sub">Windows EXE · Run as Administrator · Stealth Mode Active</div>
+            </div>
+            <a href="${DOWNLOAD_URL}" target="_blank" class="download-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              DOWNLOAD
+            </a>
+          </div>
+          ` : `
+          <div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:18px 20px;text-align:center;">
+            <div style="font-size:1.1rem;margin-bottom:6px;">⚠️ License Expired</div>
+            <div style="color:#94a3b8;font-size:0.85rem;">Please contact your seller to renew your UID whitelist access.</div>
+          </div>
+          `}
+        </div>
+      </div>
+    `;
+
+    // Animate progress bar
+    setTimeout(() => {
+      const bar = document.getElementById('expBar');
+      if (bar) bar.style.width = pct + '%';
+    }, 100);
+  }
+
+</script>
+</body>
+</html>

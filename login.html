@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Portal — UID Bypass Registry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #050508;
+      --card: #0d0d14;
+      --border: rgba(255,255,255,0.07);
+      --purple: #7c3aed;
+      --purple-light: #a855f7;
+      --cyan: #06b6d4;
+      --text: #f1f5f9;
+      --muted: #64748b;
+      --green: #10b981;
+    }
+
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* ── GRID BG ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .blob1 {
+      position: fixed; top: -120px; left: -120px;
+      width: 650px; height: 650px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.2) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+    .blob2 {
+      position: fixed; bottom: -100px; right: -100px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(6,182,212,0.13) 0%, transparent 65%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,5,8,0.8);
+      backdrop-filter: blur(20px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-hex {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 0.75rem; color: #fff;
+      font-family: 'Syne', sans-serif; letter-spacing: 0.5px;
+    }
+    .brand-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: 1px; }
+    .brand-version {
+      font-size: 0.65rem; font-weight: 600; color: var(--purple-light);
+      letter-spacing: 1px; background: rgba(124,58,237,0.15);
+      border: 1px solid rgba(124,58,237,0.3); padding: 2px 7px;
+      border-radius: 4px; margin-left: 2px;
+    }
+
+    .btn-ghost {
+      padding: 8px 16px; border-radius: 7px;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); background: rgba(255,255,255,0.04); }
+
+    /* ── PAGE ── */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      padding-top: 70px;
+    }
+
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px 80px 80px;
+      border-right: 1px solid var(--border);
+    }
+
+    .ticker {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 5px 14px 5px 5px;
+      border-radius: 99px;
+      border: 1px solid rgba(16,185,129,0.25);
+      background: rgba(16,185,129,0.07);
+      color: var(--green);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 36px;
+      width: fit-content;
+    }
+    .ticker-dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ticker-dot::before {
+      content: '';
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    .left-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase;
+      color: var(--purple-light);
+      margin-bottom: 16px;
+    }
+
+    .left-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 5vw, 4.8rem);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 0.95;
+      margin-bottom: 24px;
+    }
+    .left-title .w1 { display: block; color: var(--text); }
+    .left-title .w2 {
+      display: block;
+      background: linear-gradient(135deg, var(--purple-light) 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .left-desc {
+      color: var(--muted); font-size: 0.92rem; line-height: 1.75;
+      margin-bottom: 40px; max-width: 380px;
+    }
+    .left-desc strong { color: var(--text); font-weight: 600; }
+
+    /* Role Pills */
+    .role-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill {
+      display: flex; align-items: center; gap: 7px;
+      padding: 8px 16px; border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      font-size: 0.78rem; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .admin-dot { background: var(--purple-light); box-shadow: 0 0 8px var(--purple-light); }
+    .seller-dot { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+    .reseller-dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+    /* Feature list */
+    .feat-list { margin-top: 44px; display: flex; flex-direction: column; gap: 16px; }
+    .feat-row { display: flex; align-items: flex-start; gap: 14px; }
+    .feat-icon-sm {
+      width: 34px; height: 34px; flex-shrink: 0;
+      border-radius: 8px;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .feat-info-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 2px; }
+    .feat-info-desc { color: var(--muted); font-size: 0.8rem; line-height: 1.5; }
+
+    /* ── RIGHT PANEL (LOGIN FORM) ── */
+    .right-panel {
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 80px 64px;
+    }
+
+    .login-card {
+      width: 100%; max-width: 400px;
+    }
+
+    .card-eyebrow {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--purple-light); margin-bottom: 10px;
+    }
+    .card-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .card-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 30px; line-height: 1.55; }
+
+    /* Alert */
+    .alert { padding: 12px 14px; border-radius: 8px; font-size: 0.83rem; font-family: 'JetBrains Mono', monospace; margin-bottom: 18px; display: none; }
+    .alert-err { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #f87171; }
+    .alert-ok  { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); color: #34d399; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 9px; padding: 13px 16px;
+      color: var(--text); font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color 0.2s, background 0.2s;
+    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus { border-color: var(--purple); background: rgba(124,58,237,0.06); }
+
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--purple) 0%, #6d28d9 100%);
+      color: #fff; border: none; border-radius: 9px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.92rem; font-weight: 800;
+      letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; margin-top: 6px;
+      transition: box-shadow 0.25s, transform 0.2s;
+      box-shadow: 0 0 28px rgba(124,58,237,0.45);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-submit:hover { box-shadow: 0 0 44px rgba(124,58,237,0.65); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; }
+    .div-line { flex: 1; height: 1px; background: var(--border); }
+    .div-txt { font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+
+    .footer-note { text-align: center; color: var(--muted); font-size: 0.78rem; margin-top: 22px; line-height: 1.6; }
+    .footer-note a { color: var(--purple-light); text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 900px) {
+      .page { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob1"></div>
+<div class="blob2"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="preview.html" class="brand">
+    <div class="brand-hex">UID</div>
+    <span class="brand-text">BYPASS<span class="brand-version">V4.0</span></span>
+  </a>
+  <a href="preview.html" class="btn-ghost">← Back to Home</a>
+</nav>
+
+<!-- SPLIT LAYOUT -->
+<div class="page">
+
+  <!-- LEFT -->
+  <div class="left-panel">
+    <div class="ticker">
+      <div class="ticker-dot"></div>
+      SYSTEM V4.0 — ALL OPERATIONAL
+    </div>
+
+    <div class="left-label">Secure Staff Access</div>
+    <h1 class="left-title">
+      <span class="w1">STAFF</span>
+      <span class="w2">PORTAL</span>
+    </h1>
+    <p class="left-desc">
+      Access the UID Bypass control center. Manage whitelists, resellers, credits, and monitor <strong>real-time IP sessions</strong> across your network.
+    </p>
+
+    <div class="role-pills">
+      <div class="pill"><span class="pill-dot admin-dot"></span>Admin</div>
+      <div class="pill"><span class="pill-dot seller-dot"></span>Seller</div>
+      <div class="pill"><span class="pill-dot reseller-dot"></span>Reseller</div>
+    </div>
+
+    <div class="feat-list">
+      <div class="feat-row">
+        <div class="feat-icon-sm">⚡</div>
+        <div>
+          <div class="feat-info-title">Instant Whitelist</div>
+          <div class="feat-info-desc">Add UIDs with preset durations synced to GTC API.</div>
+        </div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-icon-sm">🌐</div>
+        <div>
+          <div class="feat-info-title">IP Login Tracking</div>
+          <div class="feat-info-desc">Every session IP is logged. Track all reseller logins live.</div>
+        </div>
+      </div>
+      <div class="feat-row">
+        <div class="feat-icon-sm">🔒</div>
+        <div>
+          <div class="feat-info-title">Ownership Isolation</div>
+          <div class="feat-info-desc">Resellers see and manage only their own UIDs — enforced backend-side.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+    <div class="login-card">
+      <div class="card-eyebrow">Authorized Access Only</div>
+      <div class="card-title">Initialize Terminal</div>
+      <div class="card-sub">Enter your staff credentials to access the control panel. All logins are IP-tracked and session-logged.</div>
+
+      <div id="alertMsg" class="alert"></div>
+
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" class="form-input" placeholder="Your staff username" autocomplete="username" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••••••" autocomplete="current-password" required />
+        </div>
+        <button type="submit" class="btn-submit" id="loginBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Access Portal
+        </button>
+      </form>
+
+      <div class="divider">
+        <div class="div-line"></div>
+        <span class="div-txt">Session IP Logged</span>
+        <div class="div-line"></div>
+      </div>
+
+      <div class="footer-note">
+        No account? Contact your <a href="#">Administrator</a> for credentials.<br>
+        <span style="font-size:0.72rem;color:#374151;margin-top:4px;display:block;">Unauthorized access attempts are monitored.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="config.js"></script>
+<script>
+  const BACKEND_URL = (window.APP_CONFIG && window.APP_CONFIG.BACKEND_URL) || 'https://uidbackend.onrender.com/api';
+
+  if (localStorage.getItem('uid_token')) {
+    window.location.href = 'dashboard.html';
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('loginBtn');
+    const alert = document.getElementById('alertMsg');
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    btn.disabled = true;
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 0.8s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Connecting...`;
+    alert.style.display = 'none';
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        alert.className = 'alert alert-ok';
+        alert.textContent = '✅ Access granted. Loading dashboard...';
+        alert.style.display = 'block';
+        localStorage.setItem('uid_token', data.token);
+        localStorage.setItem('uid_user', JSON.stringify(data.user));
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 900);
+      } else {
+        alert.className = 'alert alert-err';
+        alert.textContent = `❌ ${data.message || 'Invalid credentials. Access denied.'}`;
+        alert.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Access Portal`;
+      }
+    } catch (err) {
+      console.error(err);
+      alert.className = 'alert alert-err';
+      alert.textContent = '📡 Connecting to backend (Render spin-up)... Please wait 15 seconds and click Access Portal again.';
+      alert.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Access Portal`;
+    }
+  }
+</script>
+<style>
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+</style>
+</body>
+</html>
