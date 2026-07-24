@@ -2,6 +2,18 @@
    UID BYPASS REGISTRY - CLIENT APPLICATION & TAB LOGIC
    ====================================================== */
 
+// Domain Lock Security Guard
+const ALLOWED_HOSTS = ['uidbbypass.netlify.app', 'localhost', '127.0.0.1'];
+if (!ALLOWED_HOSTS.some(h => window.location.hostname.includes(h))) {
+  document.body.innerHTML = `
+    <div style="background:#050508;color:#ef4444;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:sans-serif;text-align:center;padding:20px;">
+      <h1 style="font-size:2.5rem;margin-bottom:10px;">🛡️ SECURITY VIOLATION</h1>
+      <p style="color:#94a3b8;max-width:500px;font-size:1.1rem;line-height:1.6;">This application is strictly locked to <b>https://uidbbypass.netlify.app</b>.<br>Unauthorized execution on domain <i>${window.location.hostname}</i> has been blocked.</p>
+    </div>
+  `;
+  throw new Error('Unauthorized Domain Execution Blocked');
+}
+
 const TOKEN = localStorage.getItem('uid_token');
 let CURRENT_USER = JSON.parse(localStorage.getItem('uid_user') || '{}');
 
