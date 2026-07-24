@@ -28,6 +28,11 @@
   status = 200
 
 [[redirects]]
+  from = "/apiuser"
+  to = "/apiuser.html"
+  status = 200
+
+[[redirects]]
   from = "/index"
   to = "/index.html"
   status = 200
