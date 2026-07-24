@@ -12,9 +12,11 @@
 
     :root {
       --bg: #050508;
+      --sidebar-bg: #08080f;
       --card: #0d0d14;
       --card-hover: #111120;
-      --border: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.07);
+      --border-active: rgba(124,58,237,0.5);
       --purple: #7c3aed;
       --purple-light: #a855f7;
       --cyan: #06b6d4;
@@ -27,6 +29,7 @@
 
     html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
+    /* ── GRID BG ── */
     body::before {
       content: ''; position: fixed; inset: 0;
       background-image:
@@ -37,112 +40,178 @@
     }
 
     .blob1 {
-      position: fixed; top: -120px; right: -120px;
+      position: fixed; top: -120px; left: -120px;
       width: 650px; height: 650px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(6,182,212,0.18) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 65%);
       pointer-events: none; z-index: 0;
     }
     .blob2 {
-      position: fixed; bottom: -100px; left: -100px;
+      position: fixed; bottom: -100px; right: -100px;
       width: 500px; height: 500px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(124,58,237,0.13) 0%, transparent 65%);
       pointer-events: none; z-index: 0;
     }
 
-    /* NAVBAR */
+    /* ── NAVBAR ── */
     .navbar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 16px 48px; border-bottom: 1px solid var(--border);
-      background: rgba(5,5,8,0.85); backdrop-filter: blur(20px);
+      background: rgba(5,5,8,0.8); backdrop-filter: blur(20px);
     }
-    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .brand-box {
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-hex {
+      width: 38px; height: 38px;
       background: linear-gradient(135deg, var(--cyan), var(--purple));
-      color: #fff; font-family: 'Syne', sans-serif; font-weight: 900;
-      font-size: 0.95rem; padding: 4px 10px; border-radius: 7px;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 0.75rem; color: #fff;
+      font-family: 'Syne', sans-serif; letter-spacing: 0.5px;
     }
-    .brand-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; letter-spacing: 0.5px; }
+    .brand-text { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: #fff; letter-spacing: 1px; }
+    .brand-version {
+      font-size: 0.65rem; font-weight: 600; color: var(--cyan);
+      letter-spacing: 1px; background: rgba(6,182,212,0.15);
+      border: 1px solid rgba(6,182,212,0.3); padding: 2px 7px;
+      border-radius: 4px; margin-left: 2px;
+    }
 
-    .nav-right { display: flex; align-items: center; gap: 14px; }
     .btn-ghost {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04); color: var(--text);
-      font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.2s;
+      padding: 8px 16px; border-radius: 7px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; text-decoration: none; transition: all 0.2s;
     }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); background: rgba(255,255,255,0.04); }
 
-    /* LAYOUT */
-    .container {
-      position: relative; z-index: 1;
-      max-width: 1100px; margin: 100px auto 40px; padding: 0 24px;
+    /* ── PAGE ── */
+    .page {
+      position: relative; z-index: 1; min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr; align-items: stretch;
+      padding-top: 70px;
     }
 
-    .page-title {
-      font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 900;
-      background: linear-gradient(135deg, #fff 40%, var(--cyan));
+    /* ── LEFT PANEL ── */
+    .left-panel {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 64px 80px 80px; border-right: 1px solid var(--border);
+    }
+    .ticker {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 5px 14px 5px 5px; border-radius: 99px;
+      border: 1px solid rgba(6,182,212,0.25); background: rgba(6,182,212,0.07);
+      color: var(--cyan); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 36px;
+      width: fit-content;
+    }
+    .ticker-dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ticker-dot::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--cyan); box-shadow: 0 0 10px var(--cyan);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    .left-label {
+      font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--cyan); margin-bottom: 16px;
+    }
+    .left-title {
+      font-family: 'Syne', sans-serif; font-size: clamp(3rem, 5vw, 4.8rem);
+      font-weight: 900; letter-spacing: -2px; line-height: 0.95; margin-bottom: 24px;
+    }
+    .left-title .w1 { display: block; color: var(--text); }
+    .left-title .w2 {
+      display: block;
+      background: linear-gradient(135deg, var(--cyan) 0%, var(--purple-light) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+      background-clip: text;
     }
-    .page-subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 32px; }
 
-    /* LOGIN CARD */
-    .auth-card {
-      max-width: 480px; margin: 40px auto;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 36px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    }
-    .auth-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; text-align: center; }
-    .auth-desc { color: var(--muted); font-size: 0.88rem; text-align: center; margin-bottom: 24px; }
+    .left-desc { color: var(--muted); font-size: 0.92rem; line-height: 1.75; margin-bottom: 40px; max-width: 380px; }
+    .left-desc strong { color: var(--text); font-weight: 600; }
 
-    .form-group { margin-bottom: 20px; }
-    .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    .form-input {
-      width: 100%; padding: 12px 16px; border-radius: 10px;
+    .role-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill {
+      display: flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 8px;
       border: 1px solid var(--border); background: rgba(255,255,255,0.03);
-      color: #fff; font-size: 0.95rem; outline: none; transition: all 0.2s;
+      font-size: 0.78rem; font-weight: 600; color: var(--muted); letter-spacing: 0.5px;
     }
-    .form-input:focus { border-color: var(--cyan); box-shadow: 0 0 16px rgba(6,182,212,0.2); }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .admin-dot { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+    .seller-dot { background: var(--purple-light); box-shadow: 0 0 8px var(--purple-light); }
+
+    .feat-list { margin-top: 44px; display: flex; flex-direction: column; gap: 16px; }
+    .feat-row { display: flex; align-items: flex-start; gap: 14px; }
+    .feat-icon-sm {
+      width: 34px; height: 34px; flex-shrink: 0; border-radius: 8px;
+      background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2);
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+    .feat-info-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 2px; }
+    .feat-info-desc { color: var(--muted); font-size: 0.8rem; line-height: 1.5; }
+
+    /* ── RIGHT PANEL (LOGIN FORM) ── */
+    .right-panel {
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 80px 64px;
+    }
+    .login-card { width: 100%; max-width: 420px; }
+
+    .card-eyebrow {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 10px;
+    }
+    .card-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.5px; }
+    .card-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 30px; line-height: 1.55; }
+
+    .alert { padding: 12px 14px; border-radius: 8px; font-size: 0.83rem; font-family: 'JetBrains Mono', monospace; margin-bottom: 18px; display: none; }
+    .alert-err { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: #f87171; }
+    .alert-ok  { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); color: #34d399; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+    }
+    .form-input {
+      width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 9px; padding: 13px 16px; color: var(--text); font-size: 0.9rem;
+      font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s, background 0.2s;
+    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus { border-color: var(--cyan); background: rgba(6,182,212,0.06); }
 
     .btn-submit {
-      width: 100%; padding: 13px; border-radius: 10px; border: none;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
-      color: #fff; font-weight: 700; font-size: 0.95rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: all 0.2s; box-shadow: 0 0 24px rgba(6,182,212,0.3);
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--cyan) 0%, #0284c7 100%);
+      color: #fff; border: none; border-radius: 99px; font-family: 'Syne', sans-serif;
+      font-size: 0.92rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; margin-top: 6px; transition: box-shadow 0.25s, transform 0.2s;
+      box-shadow: 0 0 28px rgba(6,182,212,0.45); display: flex; align-items: center; justify-content: center; gap: 10px;
     }
-    .btn-submit:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-submit:hover { box-shadow: 0 0 44px rgba(6,182,212,0.65); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    /* DASHBOARD PANEL */
-    .dashboard-panel { display: none; }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; }
+    .div-line { flex: 1; height: 1px; background: var(--border); }
+    .div-txt { font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px; margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 20px;
-    }
+    /* ── DASHBOARD (AFTER LOGIN) ── */
+    .dashboard-panel { display: none; max-width: 1100px; margin: 100px auto 40px; padding: 0 24px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
     .stat-val { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--cyan); }
     .stat-lbl { color: var(--muted); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-top: 4px; }
 
-    /* API KEY BOX */
-    .key-box {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 24px; margin-bottom: 24px;
-    }
+    .key-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 24px; }
     .key-display {
-      display: flex; align-items: center; gap: 12px;
-      background: #050508; border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 16px; margin: 14px 0;
+      display: flex; align-items: center; gap: 12px; background: #050508;
+      border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; margin: 14px 0;
     }
-    .key-code {
-      font-family: 'JetBrains Mono', monospace; font-size: 1.1rem;
-      color: var(--cyan); letter-spacing: 1px; flex: 1; word-break: break-all;
-    }
+    .key-code { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--cyan); letter-spacing: 1px; flex: 1; word-break: break-all; }
     .btn-action {
       padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
       background: rgba(255,255,255,0.05); color: #fff; font-size: 0.82rem; font-weight: 600;
@@ -152,7 +221,6 @@
     .btn-danger { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); color: var(--red); }
     .btn-danger:hover { background: rgba(239,68,68,0.3); }
 
-    /* CODE SANDBOX & DOCS */
     .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
     .tab-btn {
       padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border);
@@ -167,18 +235,16 @@
       color: #a7f3d0; overflow-x: auto; white-space: pre-wrap; margin-bottom: 24px;
     }
 
-    /* TABLE */
-    .table-container {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; overflow: hidden; margin-top: 24px;
-    }
+    .table-container { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-top: 24px; }
     table { width: 100%; border-collapse: collapse; text-align: left; }
     th { background: rgba(255,255,255,0.02); padding: 14px 18px; font-size: 0.78rem; color: var(--muted); text-transform: uppercase; border-bottom: 1px solid var(--border); }
     td { padding: 14px 18px; font-size: 0.88rem; border-bottom: 1px solid rgba(255,255,255,0.03); }
 
-    .alert { padding: 12px 16px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 16px; display: none; }
-    .alert-ok { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: var(--green); }
-    .alert-err { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: var(--red); }
+    @media (max-width: 900px) {
+      .page { grid-template-columns: 1fr; }
+      .left-panel { display: none; }
+      .right-panel { padding: 40px 24px; }
+    }
   </style>
 </head>
 <body>
@@ -189,115 +255,161 @@
 <!-- NAVBAR -->
 <nav class="navbar">
   <a href="/" class="brand">
-    <div class="brand-box">UID</div>
-    <span class="brand-text">BYPASS <span style="font-size:0.65rem;color:var(--cyan);background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);padding:2px 6px;border-radius:4px;margin-left:6px;">API PORTAL</span></span>
+    <div class="brand-hex">API</div>
+    <span class="brand-text">BYPASS<span class="brand-version">API PORTAL</span></span>
   </a>
-  <div class="nav-right">
+  <div style="display:flex;align-items:center;gap:12px;">
     <a href="/" class="btn-ghost">← Home</a>
     <a href="login" class="btn-ghost">Staff Portal</a>
     <button id="logoutBtn" onclick="apiLogout()" class="btn-ghost" style="display:none;color:var(--red);border-color:rgba(239,68,68,0.3);">Logout →</button>
   </div>
 </nav>
 
-<!-- MAIN CONTAINER -->
-<div class="container">
-
-  <!-- AUTH SECTION (Show if not logged in) -->
-  <div id="authSection" class="auth-card">
-    <div class="auth-title">API User Access</div>
-    <div class="auth-desc">Login with your Username & Password OR enter your API Key directly.</div>
-
-    <div id="authAlert" class="alert alert-err"></div>
-
-    <form onsubmit="handleApiLogin(event)">
-      <div class="form-group">
-        <label class="form-label">Username</label>
-        <input type="text" id="apiUsername" class="form-input" placeholder="e.g. KANHA">
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" id="apiPassword" class="form-input" placeholder="••••••••">
-      </div>
-
-      <div style="text-align:center;color:var(--muted);font-size:0.8rem;margin:12px 0;font-weight:600;">— OR USE API KEY —</div>
-
-      <div class="form-group">
-        <label class="form-label">API Key</label>
-        <input type="text" id="apiKeyInput" class="form-input" placeholder="UIDKEY-XXXX-XXXX-XXXX">
-      </div>
-
-      <button type="submit" id="apiLoginBtn" class="btn-submit">
-        ⚡ Connect API Portal
-      </button>
-    </form>
-  </div>
-
-  <!-- DASHBOARD PANEL (Show if logged in) -->
-  <div id="dashboardSection" class="dashboard-panel">
-    <div class="page-title">API Application Dashboard</div>
-    <div class="page-subtitle">Manage your API Key, test external endpoints, and push UIDs directly to GTC & local database.</div>
-
-    <div id="dashAlert" class="alert alert-ok"></div>
-
-    <!-- STATS -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-val" id="apiUserTag">---</div>
-        <div class="stat-lbl">API User</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="apiRoleTag">---</div>
-        <div class="stat-lbl">Access Role</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="apiCreditsTag">---</div>
-        <div class="stat-lbl">Available Credits</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-val" id="apiUidCountTag">0</div>
-        <div class="stat-lbl">Active API Whitelists</div>
-      </div>
+<!-- SPLIT LOGIN LAYOUT (BEFORE LOGIN) -->
+<div id="authSection" class="page">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="ticker">
+      <div class="ticker-dot"></div>
+      EXTERNAL API — FULLY OPERATIONAL
     </div>
 
-    <!-- API KEY MANAGEMENT -->
-    <div class="key-box">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div class="left-label">Integration & Key Manager</div>
+    <h1 class="left-title">
+      <span class="w1">API</span>
+      <span class="w2">PORTAL</span>
+    </h1>
+    <p class="left-desc">
+      Manage your secret <strong>API Key</strong>, reset keys, clear data, and integrate third-party bots or websites directly with our <strong>GTC API Push Engine</strong>.
+    </p>
+
+    <div class="role-pills">
+      <div class="pill"><span class="pill-dot admin-dot"></span>API Administrator</div>
+      <div class="pill"><span class="pill-dot seller-dot"></span>Bot Developer</div>
+    </div>
+
+    <div class="feat-list">
+      <div class="feat-row">
+        <div class="feat-icon-sm">🔑</div>
         <div>
-          <h3 style="font-family:'Syne',sans-serif;font-size:1.2rem;">🔑 Your Secret API Key</h3>
-          <p style="color:var(--muted);font-size:0.85rem;margin-top:2px;">Use this API Key in external software, Python bots, or cURL requests to push UIDs automatically.</p>
+          <div class="feat-info-title">Secret API Key</div>
+          <div class="feat-info-desc">Use `X-API-KEY` header in Python, cURL, or Node.js requests.</div>
         </div>
       </div>
-
-      <div class="key-display">
-        <span id="keyText" class="key-code">••••••••••••••••••••••••••••</span>
-        <button onclick="toggleKeyVisibility()" class="btn-action" id="toggleKeyBtn">👁️ Show</button>
-        <button onclick="copyApiKey()" class="btn-action">📋 Copy</button>
+      <div class="feat-row">
+        <div class="feat-icon-sm">⚡</div>
+        <div>
+          <div class="feat-info-title">Instant GTC Sync</div>
+          <div class="feat-info-desc">UIDs pushed via your API key automatically sync to GTC servers live.</div>
+        </div>
       </div>
+    </div>
+  </div>
 
-      <div style="display:flex;gap:12px;margin-top:16px;">
-        <button onclick="resetApiKey()" class="btn-action" style="color:var(--yellow);border-color:rgba(245,158,11,0.3);">🔄 Reset API Key</button>
-        <button onclick="resetAllData()" class="btn-action btn-danger">🗑️ Reset All My Whitelist Data</button>
+  <!-- RIGHT PANEL (LOGIN CARD) -->
+  <div class="right-panel">
+    <div class="login-card">
+      <div class="card-eyebrow">API Authorized Access</div>
+      <div class="card-title">Connect Terminal</div>
+      <div class="card-sub">Login with your Username & Password OR enter your API Key to access your developer portal.</div>
+
+      <div id="authAlert" class="alert alert-err"></div>
+
+      <form onsubmit="handleApiLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="apiUsername">Username</label>
+          <input type="text" id="apiUsername" class="form-input" placeholder="Your username (e.g. KANHA)" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="apiPassword">Password</label>
+          <input type="password" id="apiPassword" class="form-input" placeholder="••••••••••••" autocomplete="current-password">
+        </div>
+
+        <div class="divider">
+          <div class="div-line"></div>
+          <span class="div-txt">OR API KEY</span>
+          <div class="div-line"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="apiKeyInput">Secret API Key</label>
+          <input type="text" id="apiKeyInput" class="form-input" placeholder="UIDKEY-XXXX-XXXX-XXXX" style="font-family:'JetBrains Mono',monospace;">
+        </div>
+
+        <button type="submit" id="apiLoginBtn" class="btn-submit">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Connect API Portal
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PANEL (AFTER LOGIN) -->
+<div id="dashboardSection" class="dashboard-panel">
+  <div style="font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,#fff 40%,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">API Developer Dashboard</div>
+  <div style="color:var(--muted);font-size:0.95rem;margin-bottom:32px;">Manage your API Key, test external endpoints, and push UIDs directly to GTC & local database.</div>
+
+  <div id="dashAlert" class="alert alert-ok"></div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-val" id="apiUserTag">---</div>
+      <div class="stat-lbl">API User</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="apiRoleTag">---</div>
+      <div class="stat-lbl">Access Role</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="apiCreditsTag">---</div>
+      <div class="stat-lbl">Available Credits</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="apiUidCountTag">0</div>
+      <div class="stat-lbl">Active API Whitelists</div>
+    </div>
+  </div>
+
+  <!-- API KEY MANAGEMENT -->
+  <div class="key-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <h3 style="font-family:'Syne',sans-serif;font-size:1.2rem;">🔑 Secret API Key</h3>
+        <p style="color:var(--muted);font-size:0.85rem;margin-top:2px;">Use this API Key in external software, Python bots, or cURL requests to push UIDs automatically.</p>
       </div>
     </div>
 
-    <!-- CODE SNIPPET INTEGRATION -->
-    <div class="key-box">
-      <h3 style="font-family:'Syne',sans-serif;font-size:1.2rem;margin-bottom:6px;">⚡ External Integration Documentation</h3>
-      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px;">Push UIDs directly to your website & GTC API from any application or script.</p>
+    <div class="key-display">
+      <span id="keyText" class="key-code">••••••••••••••••••••••••••••</span>
+      <button onclick="toggleKeyVisibility()" class="btn-action" id="toggleKeyBtn">👁️ Show</button>
+      <button onclick="copyApiKey()" class="btn-action">📋 Copy</button>
+    </div>
 
-      <div class="tabs">
-        <button onclick="switchTab('curl')" class="tab-btn active" id="tab-curl">cURL (Terminal)</button>
-        <button onclick="switchTab('python')" class="tab-btn" id="tab-python">Python</button>
-        <button onclick="switchTab('nodejs')" class="tab-btn" id="tab-nodejs">Node.js</button>
-      </div>
+    <div style="display:flex;gap:12px;margin-top:16px;">
+      <button onclick="resetApiKey()" class="btn-action" style="color:var(--yellow);border-color:rgba(245,158,11,0.3);">🔄 Reset API Key</button>
+      <button onclick="resetAllData()" class="btn-action btn-danger">🗑️ Reset All My Whitelist Data</button>
+    </div>
+  </div>
 
-      <div id="code-curl" class="code-block">curl -X POST "https://uidbackend.onrender.com/api/v1/whitelist/add" \
-  -H "Content-Type: application/json" \
-  -H "X-API-KEY: <YOUR_API_KEY>" \
-  -d '{"account_id": "15855920849", "for_days": 30}'</div>
+  <!-- CODE SNIPPET INTEGRATION -->
+  <div class="key-box">
+    <h3 style="font-family:'Syne',sans-serif;font-size:1.2rem;margin-bottom:6px;">⚡ External Integration Documentation</h3>
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px;">Push UIDs directly to your website & GTC API from any application or script.</p>
 
-      <div id="code-python" class="code-block" style="display:none;">import requests
+    <div class="tabs">
+      <button onclick="switchTab('curl')" class="tab-btn active" id="tab-curl">cURL (Terminal)</button>
+      <button onclick="switchTab('python')" class="tab-btn" id="tab-python">Python</button>
+      <button onclick="switchTab('nodejs')" class="tab-btn" id="tab-nodejs">Node.js</button>
+    </div>
+
+    <div id="code-curl" class="code-block">curl -X POST "https://uidbackend.onrender.com/api/v1/whitelist/add" \
+-H "Content-Type: application/json" \
+-H "X-API-KEY: <YOUR_API_KEY>" \
+-d '{"account_id": "15855920849", "for_days": 30}'</div>
+
+    <div id="code-python" class="code-block" style="display:none;">import requests
 
 url = "https://uidbackend.onrender.com/api/v1/whitelist/add"
 headers = {
@@ -312,7 +424,7 @@ payload = {
 response = requests.post(url, json=payload, headers=headers)
 print(response.json())</div>
 
-      <div id="code-nodejs" class="code-block" style="display:none;">const response = await fetch("https://uidbackend.onrender.com/api/v1/whitelist/add", {
+    <div id="code-nodejs" class="code-block" style="display:none;">const response = await fetch("https://uidbackend.onrender.com/api/v1/whitelist/add", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -325,39 +437,35 @@ print(response.json())</div>
 });
 const data = await response.json();
 console.log(data);</div>
-    </div>
-
-    <!-- WHITELIST RECORDS TABLE -->
-    <div class="table-container">
-      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-        <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;">📋 UIDs Whitelisted via Your API</h3>
-        <button onclick="loadApiUserData()" class="btn-action">🔄 Refresh List</button>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Account UID</th>
-            <th>Duration</th>
-            <th>Added Time</th>
-            <th>Expiry Date</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="apiWhitelistTableBody">
-          <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">Loading API records...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
   </div>
 
+  <!-- WHITELIST RECORDS TABLE -->
+  <div class="table-container">
+    <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.1rem;">📋 UIDs Whitelisted via Your API</h3>
+      <button onclick="loadApiUserData()" class="btn-action">🔄 Refresh List</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Account UID</th>
+          <th>Duration</th>
+          <th>Added Time</th>
+          <th>Expiry Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="apiWhitelistTableBody">
+        <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">Loading API records...</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script src="config.js"></script>
 <script>
   const BACKEND_URL = (window.APP_CONFIG && window.APP_CONFIG.BACKEND_URL) || 'https://uidbackend.onrender.com/api';
-  let CURRENT_API_KEY = '';
   let RAW_API_KEY = '';
   let IS_KEY_VISIBLE = false;
 
@@ -378,7 +486,7 @@ console.log(data);</div>
 
     alertEl.style.display = 'none';
     btn.disabled = true;
-    btn.textContent = '⏳ Authenticating...';
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 0.8s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Connecting...`;
 
     try {
       const res = await fetch(`${BACKEND_URL}/api-user/login`, {
@@ -396,14 +504,15 @@ console.log(data);</div>
       } else {
         alertEl.textContent = `❌ ${data.message || 'Authentication failed'}`;
         alertEl.style.display = 'block';
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Connect API Portal`;
       }
     } catch (err) {
       console.error(err);
       alertEl.textContent = '❌ Connection error connecting to backend.';
       alertEl.style.display = 'block';
-    } finally {
       btn.disabled = false;
-      btn.textContent = '⚡ Connect API Portal';
+      btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Connect API Portal`;
     }
   }
 
@@ -536,10 +645,13 @@ console.log(data);</div>
   function apiLogout() {
     localStorage.removeItem('api_user_token');
     localStorage.removeItem('api_user_data');
-    document.getElementById('authSection').style.display = 'block';
+    document.getElementById('authSection').style.display = 'grid';
     document.getElementById('dashboardSection').style.display = 'none';
     document.getElementById('logoutBtn').style.display = 'none';
   }
 </script>
+<style>
+  @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+</style>
 </body>
 </html>
