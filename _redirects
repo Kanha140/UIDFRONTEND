@@ -1,0 +1,6 @@
+# Netlify Clean URLs Redirect Rules
+/dashboard    /dashboard.html   200
+/login        /login.html       200
+/client       /client.html      200
+/preview      /preview.html     200
+/index        /index.html       200

@@ -8,8 +8,11 @@ const TOKEN = localStorage.getItem('uid_token');
 let CURRENT_USER = JSON.parse(localStorage.getItem('uid_user') || '{}');
 
 // Login protection — redirect if not authenticated
-if (!TOKEN && !window.location.href.includes('login.html') && !window.location.href.includes('preview.html') && !window.location.href.includes('client.html')) {
-  window.location.href = 'login.html';
+const currentPath = window.location.pathname.toLowerCase();
+const isPublic = currentPath.includes('login') || currentPath.includes('preview') || currentPath.includes('client');
+
+if (!TOKEN && !isPublic) {
+  window.location.href = currentPath.endsWith('.html') ? 'login.html' : 'login';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -388,7 +391,8 @@ function closeModal(id) {
 function logout() {
   localStorage.removeItem('uid_token');
   localStorage.removeItem('uid_user');
-  window.location.href = 'login.html';
+  const isHtml = window.location.pathname.endsWith('.html');
+  window.location.href = isHtml ? 'login.html' : 'login';
 }
 
 async function handleDeleteUser(userId, username) {

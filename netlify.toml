@@ -1,0 +1,33 @@
+[build]
+  publish = "."
+
+[processing]
+  skip_processing = false
+
+[processing.html]
+  pretty_urls = true
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/client"
+  to = "/client.html"
+  status = 200
+
+[[redirects]]
+  from = "/preview"
+  to = "/preview.html"
+  status = 200
+
+[[redirects]]
+  from = "/index"
+  to = "/index.html"
+  status = 200
